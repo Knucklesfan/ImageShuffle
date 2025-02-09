@@ -34,6 +34,9 @@ Here's a few examples of some of the stuff that ImageShuffle can do:
 
 `python sort.py randomized.png 100 vert b frame`
 
+![cooper.jpg, with craaaaaaaazzzzyyyyy colors](examples/output.gif)
+
+
 ## Okay, you convinced me: How do I use it?
 Tested on `Python 3.13.0` with `pillow (11.1.0)` so if something changes in the future, that's the package versions used here!
 
