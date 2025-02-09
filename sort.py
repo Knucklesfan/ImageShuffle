@@ -54,7 +54,7 @@ if len(sys.argv) > 1:
                                 if lastoffset+y < im.width:
                                     px[lastoffset+y,i] = rowarr[y]
                             lastoffset = offset
-                    im.save("frames/myfile"+str(b)+".png")
+                    im.save("frames/frame"+str(b)+".png")
             elif(sys.argv[3] == "vert"):
                 for b in range(0,int(iters)):
                     px = im.load()
@@ -80,7 +80,7 @@ if len(sys.argv) > 1:
                                 if lastoffset+y < im.height:
                                     px[i,lastoffset+y] = rowarr[y]
                             lastoffset = offset
-                    im.save("frames/myfile"+str(b)+".png")
+                    im.save("frames/frame"+str(b)+".png")
             elif(sys.argv[3] == "both"):
                 for b in range(0,int(iters)):
                     px = im.load()

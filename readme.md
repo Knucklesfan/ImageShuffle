@@ -34,6 +34,12 @@ Here's a few examples of some of the stuff that ImageShuffle can do:
 
 `python sort.py randomized.png 100 vert b frame`
 
+`ffmpeg -framerate 24 -i myfile%d.png -r 30 output.gif`
+
+or if you're partial to mp4
+
+`ffmpeg -framerate 24 -i myfile%d.png -r 30 output.mp4`                                                                                                                                                           
+
 ![cooper.jpg, with craaaaaaaazzzzyyyyy colors](examples/output.gif)
 
 
@@ -54,5 +60,10 @@ thats literally it
 ## Contribution
 why would you want to contribute to this
 
+## Send scrambled images with secret pictures of classified government documents to your friends today!
+
+![A secret picture telling you to have fun!](examples/seeecretmessage.png)
+
+P.S, have fun and try decoding this image today!
 
 
