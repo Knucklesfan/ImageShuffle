@@ -2,6 +2,15 @@ import sys
 from PIL import Image
 import random
 import os
+def chopsort(item):
+    return (item[0]&3)|(item[1]&3)<<2|(item[2]&3)<<4
+def chopsortv2(item):
+    # return (item[0]&7)|(item[1]&3)<<2|(item[2]&3)<<4 # this produces a very interested effect
+    return (item[0]&7)|(item[1]&3)<<3|(item[2]&3)<<5
+
+def mix(x,y,a):
+    return x*(1-a)+y*a
+
 if len(sys.argv) > 1:
     if not os.path.exists("frames/"):
         os.makedirs("frames/")
@@ -128,6 +137,70 @@ if len(sys.argv) > 1:
                                     px[lastyoffset+y,i] = rowarr[y]
                             lastyoffset = yoffset
 
+                    im.save("frames/frame"+str(b)+".png")
+            elif(sys.argv[3] == "dechop"):
+                for b in range(0,int(iters)):
+                    im = Image.open(sys.argv[1]).convert('RGBA'); # we have to reload the image each time because that data gets nuked otherwise?
+                    px = im.load()
+
+                    for i in range(0,im.width):
+                        samples = random.randint(int(((b/int(sys.argv[2])*2)*im.height)//2)+1, int((b*2/int(sys.argv[2]))*im.height)+2)
+                        if b >= int(iters)-1 or samples > im.height:
+                            samples = im.height
+                        if iters == 1:
+                            samples = int(sys.argv[2])
+                        if randsample:
+                            samples = random.randint(1, int(sys.argv[2]))
+                        offset = 0
+                        lastoffset = 0
+                        for x in range(0,im.height//samples):
+                            rowarr = [(255,0,0)]*samples
+                            for y in range(0,samples):
+                                rowarr[y] = px[i,offset]
+                                offset += 1
+                            rowarr.sort(key=chopsort)
+                            for y in range(0,samples):
+                                if lastoffset+y < im.height:
+                                    color = [rowarr[y][0]&0xE0,rowarr[y][1]&0xE0,rowarr[y][2]&0xE0,255]
+                                    othercolor = ((rowarr[y][0]&0x1C)<<3,(rowarr[y][1]&0x1C)<<3,(rowarr[y][2]&0x1C)<<3,255)
+                                    color[0] = int(mix(color[0],othercolor[0],b/int(sys.argv[2])))
+                                    color[1] = int(mix(color[1],othercolor[1],b/int(sys.argv[2])))
+                                    color[2] = int(mix(color[2],othercolor[2],b/int(sys.argv[2])))
+
+                                    px[i,lastoffset+y] = tuple(color)
+                            lastoffset = offset
+                    im.save("frames/frame"+str(b)+".png")
+            elif(sys.argv[3] == "dechopv2"):
+                for b in range(0,int(iters)):
+                    im = Image.open(sys.argv[1]).convert('RGBA'); # we have to reload the image each time because that data gets nuked otherwise?
+                    px = im.load()
+
+                    for i in range(0,im.width):
+                        samples = random.randint(int(((b/int(sys.argv[2])*2)*im.height)//2)+1, int((b*2/int(sys.argv[2]))*im.height)+2)
+                        if b >= int(iters)-1 or samples > im.height:
+                            samples = im.height
+                        if iters == 1:
+                            samples = int(sys.argv[2])
+                        if randsample:
+                            samples = random.randint(1, int(sys.argv[2]))
+                        offset = 0
+                        lastoffset = 0
+                        for x in range(0,im.height//samples):
+                            rowarr = [(255,0,0)]*samples
+                            for y in range(0,samples):
+                                rowarr[y] = px[i,offset]
+                                offset += 1
+                            rowarr.sort(key=chopsort)
+                            for y in range(0,samples):
+                                if lastoffset+y < im.height:
+                                    color = [rowarr[y][0]&0xE0,rowarr[y][1]&0xE0,rowarr[y][2]&0xE0,255]
+                                    othercolor = ((rowarr[y][0]&0x18)<<3,(rowarr[y][1]&0x1C)<<3,(rowarr[y][2]&0x1C)<<3,255)
+                                    color[0] = int(mix(color[0],othercolor[0],b/int(sys.argv[2])))
+                                    color[1] = int(mix(color[1],othercolor[1],b/int(sys.argv[2])))
+                                    color[2] = int(mix(color[2],othercolor[2],b/int(sys.argv[2])))
+
+                                    px[i,lastoffset+y] = tuple(color)
+                            lastoffset = offset
                     im.save("frames/frame"+str(b)+".png")
 
     except OSError:
